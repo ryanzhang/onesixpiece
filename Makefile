@@ -1,5 +1,5 @@
 .ONESHELL:
-ENV_PREFIX=$(shell python -c "if __import__('pathlib').Path('.venv/bin/pip').exists(): print('.venv/bin/')")
+ENV_PREFIX=$(shell python3 -c "if __import__('pathlib').Path('.venv/bin/pip').exists(): print('.venv/bin/')")
 USING_POETRY=$(shell grep "tool.poetry" pyproject.toml && echo "yes")
 
 .PHONY: help
@@ -114,6 +114,22 @@ switch-to-poetry: ## Switch to poetry package manager.
 .PHONY: init
 init:             ## Initialize the project based on an application template.
 	@./.github/init.sh
+
+# 使用twine
+.PHONY: testdist
+testdist:
+	python setup.py sdist bdist_wheel
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+.PHONY: sdist
+sdist:
+	twine upload dist/*
+
+# Make container image 
+.PHONY: image
+image:
+	@read -p "Version? (provide the next x.y.z semver) : " TAG
+	podman build -f Containerfile . -t onesixpiece:$${TAG}
 
 
 # This project has been generated from rochacbruno/python-project-template

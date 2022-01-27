@@ -1,6 +1,14 @@
+# -*- coding: UTF-8 -*-
+
 import argparse  # pragma: no cover
+import logging  # pragma: no cover
 
 from . import BaseClass, base_function  # pragma: no cover
+
+# 初始化日志
+logging.basicConfig(
+    level=logging.INFO, format=" %(asctime)s - %(levelname)s- %(message)s"
+)
 
 
 def main() -> None:  # pragma: no cover
@@ -49,6 +57,9 @@ def main() -> None:  # pragma: no cover
     print(f"{args.message} {args.name}!")
     if args.verbose:
         print("Verbose mode is on.")
+
+    if args.verbose:
+        logging.info("Runing the main function, Allright!")
 
     print("Executing main function")
     base = BaseClass()
